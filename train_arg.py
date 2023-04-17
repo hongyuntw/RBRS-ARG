@@ -435,20 +435,16 @@ def train_rl_ps_aspect(**kwargs):
 
 
             ## ABAE loss
-            t = 0.1
             sample_reviews_aspect_emb = get_aspect_emb(sample_output_texts, opt, w2v, abae, mode='sample')
             input_review_aspect_emb = get_aspect_emb(input_reviews, opt, w2v, abae, mode='input')
  
             
             if aspect_pooling == 'similar':
-                # similar pooling
                 max_similar_index = np.argmax(all_rouge_scores, 1)
                 target_aspect_embedding = input_review_aspect_emb[torch.arange(input_review_aspect_emb.size(0)), max_similar_index]
             elif aspect_pooling == 'mean':
-                # mean pooling
                 target_aspect_embedding = torch.mean(input_review_aspect_emb, 1)
             elif aspect_pooling == 'max':
-                # max pooling
                 target_aspect_embedding , _ = torch.max(input_review_aspect_emb, dim=1)
 
             if aspect_pooling == 'None':
